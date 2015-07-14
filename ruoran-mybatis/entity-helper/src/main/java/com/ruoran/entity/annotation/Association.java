@@ -10,6 +10,7 @@ import java.lang.annotation.Target;
 public @interface Association
 {
 	String column();
-	
+
+
 	String useAs() default "";
 }

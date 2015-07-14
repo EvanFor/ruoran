@@ -11,6 +11,7 @@ import com.ruoran.entity.helper.EntityHelper.EntityTable;
 
 public class EntityHelperTest
 {
+	
 	@Test
 	public void testGetEntityTable()
 	{

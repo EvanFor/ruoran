@@ -8,6 +8,7 @@ import javax.persistence.Table;
 @Table(name = "idcard")
 public class IdCard
 {
+	
 	@Id
 	private Long number;
 	

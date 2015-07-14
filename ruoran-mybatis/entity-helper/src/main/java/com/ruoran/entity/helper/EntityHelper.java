@@ -29,7 +29,7 @@ import com.ruoran.entity.constant.IdentityDialect;
 /**
  * 实体类工具类 - 处理实体和数据库表以及字段关键的一个类
  *
- * @author liuzh
+ * @author ruoran
  */
 public class EntityHelper
 {
