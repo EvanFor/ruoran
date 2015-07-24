@@ -80,6 +80,25 @@ public class KryoExt
 		pool.release(kryo);
 	}
 	
+	public byte[] writeClassAndObject(Object object)
+	{
+		Kryo kryo = this.getKryo();
+		FastOutput output = new FastOutput(buffer);
+		kryo.writeClassAndObject(output, object);
+		this.release(kryo);
+		return output.toBytes();
+	}
+	
+	@SuppressWarnings("unchecked")
+	public <T> T readClassAndObject(byte[] data)
+	{
+		Kryo kryo = this.getKryo();
+		FastInput input = new FastInput(data);
+		T obj = (T) kryo.readClassAndObject(input);
+		this.release(kryo);
+		return obj;
+	}
+	
 	public byte[] write(Object object)
 	{
 		Kryo kryo = this.getKryo();
