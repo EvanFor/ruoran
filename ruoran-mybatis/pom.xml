@@ -8,11 +8,18 @@
 	<packaging>pom</packaging>
 
 	<modules>
-		<module>entity-helper</module>
+		<module>ruoran-entity-helper</module>
+		<module>ruoran-mybatis-simple-mapper</module>
 	</modules>
 
 	<dependencyManagement>
 		<dependencies>
+
+			<dependency>
+				<groupId>javax.persistence</groupId>
+				<artifactId>persistence-api</artifactId>
+				<version>1.0.2</version>
+			</dependency>
 
 			<dependency>
 				<groupId>commons-beanutils</groupId>
@@ -21,9 +28,9 @@
 			</dependency>
 
 			<dependency>
-				<groupId>javax.persistence</groupId>
-				<artifactId>persistence-api</artifactId>
-				<version>1.0.2</version>
+				<groupId>org.mybatis</groupId>
+				<artifactId>mybatis</artifactId>
+				<version>3.3.0</version>
 			</dependency>
 
 		</dependencies>
