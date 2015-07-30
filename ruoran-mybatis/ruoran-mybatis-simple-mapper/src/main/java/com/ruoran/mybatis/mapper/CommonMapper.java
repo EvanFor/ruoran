@@ -1,4 +1,4 @@
-package org.ruoran.mybatis.mapper;
+package com.ruoran.mybatis.mapper;
 
 import java.util.List;
 import java.util.Map;
@@ -8,7 +8,8 @@ import org.apache.ibatis.annotations.InsertProvider;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.SelectProvider;
 import org.apache.ibatis.annotations.UpdateProvider;
-import org.ruoran.mybatis.provider.CommonProvider;
+
+import com.ruoran.mybatis.provider.CommonProvider;
 
 /**
  * 这个仍然是接口类，不需要被继承，可以直接用

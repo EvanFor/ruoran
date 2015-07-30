@@ -1,4 +1,4 @@
-package org.ruoran.mybatis.sql;
+package com.ruoran.mybatis.sql;
 
 import org.apache.ibatis.builder.StaticSqlSource;
 import org.apache.ibatis.exceptions.TooManyResultsException;

@@ -1,4 +1,4 @@
-package org.ruoran.mybatis.provider;
+package com.ruoran.mybatis.provider;
 
 import java.util.List;
 import java.util.Map;

@@ -1,11 +1,10 @@
-package org.ruoran.mybatis.ext;
+package com.ruoran.mybatis.ext;
 
 import java.util.List;
 
-import org.ruoran.mybatis.mapper.CommonMapper;
-
 import com.ruoran.entity.Example;
 import com.ruoran.entity.helper.EntityHelper;
+import com.ruoran.mybatis.mapper.CommonMapper;
 
 /**
  * 封装的CommonMapper,实际上只对select方法做了处理<br>
