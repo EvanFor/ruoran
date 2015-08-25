@@ -8,7 +8,7 @@
 		<version>0.0.1</version>
 	</parent>
 
-	<artifactId>ruoran-mybatis-simple-mapper</artifactId>
+	<artifactId>simple-mapper</artifactId>
 	<packaging>jar</packaging>
 
 	<dependencies>

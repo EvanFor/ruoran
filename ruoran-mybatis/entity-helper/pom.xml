@@ -8,7 +8,7 @@
 		<version>0.0.1</version>
 	</parent>
 
-	<artifactId>ruoran-entity-helper</artifactId>
+	<artifactId>entity-helper</artifactId>
 	<packaging>jar</packaging>
 
 	<dependencies>

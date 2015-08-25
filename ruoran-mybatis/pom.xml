@@ -8,8 +8,8 @@
 	<packaging>pom</packaging>
 
 	<modules>
-		<module>ruoran-entity-helper</module>
-		<module>ruoran-mybatis-simple-mapper</module>
+		<module>entity-helper</module>
+		<module>simple-mapper</module>
 	</modules>
 
 	<dependencyManagement>
