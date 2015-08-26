@@ -20,7 +20,7 @@
 		
 		<dependency>
 			<groupId>com.ruoran</groupId>
-			<artifactId>ruoran-entity-helper</artifactId>
+			<artifactId>entity-helper</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		
