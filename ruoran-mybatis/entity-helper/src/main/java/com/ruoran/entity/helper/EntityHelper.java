@@ -83,14 +83,14 @@ public class EntityHelper
 		private String schema;
 		private String orderByClause;
 		
-		//实体类 => 全部列属性
+		// 实体类 => 全部列属性
 		private Set<EntityColumn> entityClassColumns;
-		//实体类 => 主键信息
+		// 实体类 => 主键信息
 		private Set<EntityColumn> entityClassPKColumns;
-		//字段名和属性名的映射
+		// 字段名和属性名的映射
 		private Map<String, String> aliasMap;
 		
-		//useGenerator包含多列的时候需要用到
+		// useGenerator包含多列的时候需要用到
 		private List<String> keyProperties;
 		private List<String> keyColumns;
 		
@@ -367,7 +367,7 @@ public class EntityHelper
 		EntityTable entityTable = entityTableMap.get(entityClass);
 		if (entityTable == null)
 		{
-			initEntityNameMap(entityClass);
+			initEntityNameMap(entityClass, AttrsStyle.CamelHump);
 			entityTable = entityTableMap.get(entityClass);
 		}
 		if (entityTable == null) { throw new RuntimeException("无法获取实体类" + entityClass.getCanonicalName() + "对应的表名!"); }
@@ -379,7 +379,7 @@ public class EntityHelper
 	 *
 	 * @param entityClass
 	 */
-	public static synchronized void initEntityNameMap(Class<?> entityClass)
+	public static synchronized void initEntityNameMap(Class<?> entityClass, AttrsStyle tstyle)
 	{
 		if (entityTableMap.get(entityClass) != null) { return; }
 		
@@ -390,12 +390,16 @@ public class EntityHelper
 			attrsStyle = style.style();
 		}
 		
-		if (attrsStyle == null)
+		if (attrsStyle == null && tstyle != null)
 		{
-			attrsStyle = AttrsStyle.Upper;
+			attrsStyle = tstyle;
+		}
+		else
+		{
+			attrsStyle = AttrsStyle.CamelHump;
 		}
 		
-		//表名
+		// 表名
 		EntityTable entityTable = null;
 		if (entityClass.isAnnotationPresent(Table.class))
 		{
@@ -410,10 +414,10 @@ public class EntityHelper
 		if (entityTable == null)
 		{
 			entityTable = new EntityTable();
-			//对大小写敏感的情况，这里不自动转换大小写，如果有需要，通过@Table注解实现
+			// 对大小写敏感的情况，这里不自动转换大小写，如果有需要，通过@Table注解实现
 			entityTable.name = format(attrsStyle, entityClass.getSimpleName());
 		}
-		//列
+		// 列
 		List<Field> fieldList = getAllField(entityClass, null);
 		Set<EntityColumn> columnSet = new LinkedHashSet<EntityColumn>();
 		Set<EntityColumn> pkColumnSet = new LinkedHashSet<EntityColumn>();
@@ -452,7 +456,7 @@ public class EntityHelper
 			entityColumn.setProperty(field.getName());
 			entityColumn.setColumn(columnName.toUpperCase());
 			entityColumn.setJavaType(field.getType());
-			//order by
+			// order by
 			if (field.isAnnotationPresent(OrderBy.class))
 			{
 				OrderBy orderBy = field.getAnnotation(OrderBy.class);
@@ -465,7 +469,7 @@ public class EntityHelper
 					entityColumn.setOrderBy(orderBy.value());
 				}
 			}
-			//主键策略 - Oracle序列，MySql自动增长，UUID
+			// 主键策略 - Oracle序列，MySql自动增长，UUID
 			if (field.isAnnotationPresent(SequenceGenerator.class))
 			{
 				SequenceGenerator sequenceGenerator = field.getAnnotation(SequenceGenerator.class);
@@ -488,11 +492,12 @@ public class EntityHelper
 				}
 				else
 				{
-					//允许通过generator来设置获取id的sql,例如mysql=CALL IDENTITY(),hsqldb=SELECT SCOPE_IDENTITY()
-					//允许通过拦截器参数设置公共的generator
+					// 允许通过generator来设置获取id的sql,例如mysql=CALL
+					// IDENTITY(),hsqldb=SELECT SCOPE_IDENTITY()
+					// 允许通过拦截器参数设置公共的generator
 					if (generatedValue.strategy() == GenerationType.IDENTITY)
 					{
-						//mysql的自动增长
+						// mysql的自动增长
 						entityColumn.setIdentity(true);
 						if (!generatedValue.generator().equals(""))
 						{
@@ -533,7 +538,7 @@ public class EntityHelper
 		{
 			entityTable.entityClassPKColumns = pkColumnSet;
 		}
-		//缓存
+		// 缓存
 		entityTableMap.put(entityClass, entityTable);
 	}
 	
@@ -807,7 +812,7 @@ public class EntityHelper
 		for (String name : map.keySet())
 		{
 			String alia = name;
-			//sql在被其他拦截器处理后，字段可能发生变化，例如分页插件增加rownum
+			// sql在被其他拦截器处理后，字段可能发生变化，例如分页插件增加rownum
 			if (alias.containsKey(name))
 			{
 				alia = alias.get(name);
