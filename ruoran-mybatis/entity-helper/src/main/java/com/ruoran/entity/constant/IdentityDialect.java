@@ -1,7 +1,5 @@
 package com.ruoran.entity.constant;
 
-import com.ruoran.mybatis.mapper.MapperHelper.IdentityDialect;
-
 /**
  * IDENTITY的可选值
  */
