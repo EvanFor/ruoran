@@ -39,15 +39,7 @@ public class CommonProvider extends BaseProvider
 						}
 						else
 						{
-							Class<?> javaType = column.getJavaType();
-							if (EntityHelper.isCustomType(javaType))
-							{
-								WHERE(column.getColumn() + "=#{record." + column.getUseAs() + "}");
-							}
-							else
-							{
-								WHERE(column.getColumn() + "=#{record." + column.getProperty() + "}");
-							}
+							WHERE(column.getColumn() + "=#{record." + column.getProperty() + "}");
 						}
 					}
 				}
@@ -83,15 +75,7 @@ public class CommonProvider extends BaseProvider
 						}
 						else
 						{
-							Class<?> javaType = column.getJavaType();
-							if (EntityHelper.isCustomType(javaType))
-							{
-								WHERE(column.getColumn() + "=#{record." + column.getUseAs() + "}");
-							}
-							else
-							{
-								WHERE(column.getColumn() + "=#{record." + column.getProperty() + "}");
-							}
+							WHERE(column.getColumn() + "=#{record." + column.getProperty() + "}");
 						}
 						
 					}
@@ -142,15 +126,7 @@ public class CommonProvider extends BaseProvider
 						}
 						else
 						{
-							Class<?> javaType = column.getJavaType();
-							if (EntityHelper.isCustomType(javaType))
-							{
-								WHERE(column.getColumn() + "=#{record." + column.getUseAs() + "}");
-							}
-							else
-							{
-								WHERE(column.getColumn() + "=#{record." + column.getProperty() + "}");
-							}
+							WHERE(column.getColumn() + "=#{record." + column.getProperty() + "}");
 						}
 					}
 				}
@@ -159,11 +135,11 @@ public class CommonProvider extends BaseProvider
 	}
 	
 	/**
-	* 通过主键查询，主键字段都不能为空
-	*
-	* @param params
-	* @return
-	*/
+	 * 通过主键查询，主键字段都不能为空
+	 *
+	 * @param params
+	 * @return
+	 */
 	public String selectByPrimaryKey(final Map<String, Object> params)
 	{
 		return new SQL()
@@ -189,11 +165,11 @@ public class CommonProvider extends BaseProvider
 	}
 	
 	/**
-	* 新增
-	*
-	* @param params
-	* @return
-	*/
+	 * 新增
+	 *
+	 * @param params
+	 * @return
+	 */
 	public String insert(final Map<String, Object> params)
 	{
 		return new SQL()
@@ -204,25 +180,18 @@ public class CommonProvider extends BaseProvider
 				INSERT_INTO(entityTable.getName());
 				for (EntityHelper.EntityColumn column : entityTable.getEntityClassColumns())
 				{
-					if (column.getUseAs() != null)
-					{
-						VALUES(column.getColumn(), "#{record." + column.getUseAs() + "}");
-					}
-					else
-					{
-						VALUES(column.getColumn(), "#{record." + column.getProperty() + "}");
-					}
+					VALUES(column.getColumn(), "#{record." + column.getProperty() + "}");
 				}
 			}
 		}.toString();
 	}
 	
 	/**
-	* 新增非空字段，空字段可以使用表的默认值
-	*
-	* @param params
-	* @return
-	*/
+	 * 新增非空字段，空字段可以使用表的默认值
+	 *
+	 * @param params
+	 * @return
+	 */
 	public String insertSelective(final Map<String, Object> params)
 	{
 		return new SQL()
@@ -238,14 +207,7 @@ public class CommonProvider extends BaseProvider
 					Object value = metaObject.getValue(column.getProperty());
 					if (column.isId() || value != null)
 					{
-						if (column.getUseAs() != null)
-						{
-							VALUES(column.getColumn(), "#{record." + column.getUseAs() + "}");
-						}
-						else
-						{
-							VALUES(column.getColumn(), "#{record." + column.getProperty() + "}");
-						}
+						VALUES(column.getColumn(), "#{record." + column.getProperty() + "}");
 					}
 				}
 			}
@@ -253,11 +215,11 @@ public class CommonProvider extends BaseProvider
 	}
 	
 	/**
-	* 通过查询条件删除
-	*
-	* @param params
-	* @return
-	*/
+	 * 通过查询条件删除
+	 *
+	 * @param params
+	 * @return
+	 */
 	public String delete(final Map<String, Object> params)
 	{
 		return new SQL()
@@ -279,15 +241,7 @@ public class CommonProvider extends BaseProvider
 					else
 					{
 						hasValue = true;
-						Class<?> javaType = column.getJavaType();
-						if (EntityHelper.isCustomType(javaType))
-						{
-							WHERE(column.getColumn() + "=#{record." + column.getUseAs() + "}");
-						}
-						else
-						{
-							WHERE(column.getColumn() + "=#{record." + column.getProperty() + "}");
-						}
+						WHERE(column.getColumn() + "=#{record." + column.getProperty() + "}");
 					}
 				}
 				
@@ -343,18 +297,10 @@ public class CommonProvider extends BaseProvider
 				UPDATE(entityTable.getName());
 				for (EntityHelper.EntityColumn column : entityTable.getEntityClassColumns())
 				{
-					//更新不是ID的字段，因为根据主键查询的...更新后还是一样。
+					// 更新不是ID的字段，因为根据主键查询的...更新后还是一样。
 					if (!column.isId())
 					{
-						Class<?> javaType = column.getJavaType();
-						if (EntityHelper.isCustomType(javaType))
-						{
-							SET(column.getColumn() + "=#{record." + column.getUseAs() + "}");
-						}
-						else
-						{
-							SET(column.getColumn() + "=#{record." + column.getProperty() + "}");
-						}
+						SET(column.getColumn() + "=#{record." + column.getProperty() + "}");
 					}
 				}
 				applyWherePk(this, metaObject, entityTable.getEntityClassPKColumns(), "record");
@@ -381,18 +327,10 @@ public class CommonProvider extends BaseProvider
 				for (EntityHelper.EntityColumn column : entityTable.getEntityClassColumns())
 				{
 					Object value = metaObject.getValue(column.getProperty());
-					//更新不是ID的字段，因为根据主键查询的...更新后还是一样。
+					// 更新不是ID的字段，因为根据主键查询的...更新后还是一样。
 					if (value != null && !column.isId())
 					{
-						Class<?> javaType = column.getJavaType();
-						if (EntityHelper.isCustomType(javaType))
-						{
-							SET(column.getColumn() + "=#{record." + column.getUseAs() + "}");
-						}
-						else
-						{
-							SET(column.getColumn() + "=#{record." + column.getProperty() + "}");
-						}
+						SET(column.getColumn() + "=#{record." + column.getProperty() + "}");
 					}
 				}
 				applyWherePk(this, metaObject, entityTable.getEntityClassPKColumns(), "record");
@@ -459,18 +397,10 @@ public class CommonProvider extends BaseProvider
 				for (EntityHelper.EntityColumn column : entityTable.getEntityClassColumns())
 				{
 					Object value = metaObject.getValue(column.getProperty());
-					//更新不是ID的字段，因为根据主键查询的...更新后还是一样。
+					// 更新不是ID的字段，因为根据主键查询的...更新后还是一样。
 					if (value != null)
 					{
-						Class<?> javaType = column.getJavaType();
-						if (EntityHelper.isCustomType(javaType))
-						{
-							SET(column.getColumn() + "=#{record." + column.getUseAs() + "}");
-						}
-						else
-						{
-							SET(column.getColumn() + "=#{record." + column.getProperty() + "}");
-						}
+						SET(column.getColumn() + "=#{record." + column.getProperty() + "}");
 					}
 				}
 				applyWhere(this, example);
@@ -489,18 +419,10 @@ public class CommonProvider extends BaseProvider
 				UPDATE(entityTable.getName());
 				for (EntityHelper.EntityColumn column : entityTable.getEntityClassColumns())
 				{
-					//更新不是ID的字段，因为根据主键查询的...更新后还是一样。
+					// 更新不是ID的字段，因为根据主键查询的...更新后还是一样。
 					if (!column.isId())
 					{
-						Class<?> javaType = column.getJavaType();
-						if (EntityHelper.isCustomType(javaType))
-						{
-							SET(column.getColumn() + "=#{record." + column.getUseAs() + "}");
-						}
-						else
-						{
-							SET(column.getColumn() + "=#{record." + column.getProperty() + "}");
-						}
+						SET(column.getColumn() + "=#{record." + column.getProperty() + "}");
 					}
 				}
 				applyWhere(this, example);

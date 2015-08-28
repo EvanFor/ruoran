@@ -363,6 +363,8 @@ public class EntityHelper
 	 */
 	private static final Map<Class<?>, EntityTable> entityTableMap = new HashMap<Class<?>, EntityTable>();
 	
+	private static final Map<Class<?>, Map<String, EntityColumn>> associationsCache = new HashMap<Class<?>, Map<String, EntityColumn>>();
+	
 	/**
 	 * 获取表对象
 	 *
@@ -419,6 +421,8 @@ public class EntityHelper
 		List<Field> fieldList = getAllField(entityClass, null);
 		Set<EntityColumn> columnSet = new LinkedHashSet<EntityColumn>();
 		Set<EntityColumn> pkColumnSet = new LinkedHashSet<EntityColumn>();
+		Map<String, EntityColumn> associations = new HashMap<String, EntityColumn>();
+		
 		for (Field field : fieldList)
 		{
 			if (field.isAnnotationPresent(Transient.class))
@@ -443,7 +447,8 @@ public class EntityHelper
 			{
 				Association column = field.getAnnotation(Association.class);
 				columnName = column.column();
-				entityColumn.setUseAs(column.use());
+				entityColumn.setProperty(column.use());
+				associations.put(column.use(), entityColumn);
 			}
 			
 			if (columnName == null || columnName.equals(""))
@@ -451,7 +456,10 @@ public class EntityHelper
 				columnName = format(attrsStyle, field.getName());
 			}
 			
-			entityColumn.setProperty(field.getName());
+			if (entityColumn.getProperty() == null)
+			{
+				entityColumn.setProperty(field.getName());
+			}
 			entityColumn.setColumn(columnName.toUpperCase());
 			entityColumn.setJavaType(field.getType());
 			// order by
@@ -520,6 +528,7 @@ public class EntityHelper
 			}
 			
 			columnSet.add(entityColumn);
+			associationsCache.put(entityClass, associations);
 			
 			if (entityColumn.isId())
 			{
@@ -542,16 +551,7 @@ public class EntityHelper
 	
 	public static Map<String, EntityColumn> getAssociations(Class<?> entityClass)
 	{
-		Set<EntityColumn> columns = getColumns(entityClass);
-		Map<String, EntityColumn> map = new HashMap<String, EntityColumn>();
-		for (EntityColumn column : columns)
-		{
-			if (column.getUseAs() != null)
-			{
-				map.put(column.getUseAs(), column);
-			}
-		}
-		return map;
+		return associationsCache.get(entityClass);
 	}
 	
 	/**
@@ -834,6 +834,7 @@ public class EntityHelper
 			if (map == null) { return null; }
 			Map<String, Object> aliasMap = map2AliasMap(map, beanClass);
 			Map<String, EntityColumn> associations = getAssociations(beanClass);
+			
 			Iterator<Entry<String, EntityColumn>> it = associations.entrySet().iterator();
 			while (it.hasNext())
 			{
@@ -852,9 +853,11 @@ public class EntityHelper
 					throw new RuntimeException(column.getJavaType().getCanonicalName() + "类没有默认空的构造方法!");
 				}
 				
+				String beanPro = key.substring(0, key.lastIndexOf("."));
 				String kidPro = key.substring(key.lastIndexOf(".") + 1);
+				
 				BeanUtils.setProperty(kid, kidPro, value);
-				aliasMap.put(column.getProperty(), kid);
+				aliasMap.put(beanPro, kid);
 				aliasMap.remove(key);
 			}
 			
