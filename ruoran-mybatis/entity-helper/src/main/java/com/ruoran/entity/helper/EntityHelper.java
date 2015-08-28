@@ -73,6 +73,13 @@ public class EntityHelper
 		return !types.contains(clazz);
 	}
 	
+	private static AttrsStyle attrsStyle = null;
+	
+	public void setStyle(AttrsStyle style)
+	{
+		attrsStyle = style;
+	}
+	
 	/**
 	 * 实体对应表的配置信息
 	 */
@@ -379,25 +386,16 @@ public class EntityHelper
 	 *
 	 * @param entityClass
 	 */
-	public static synchronized void initEntityNameMap(Class<?> entityClass, AttrsStyle tstyle)
+	public static synchronized void initEntityNameMap(Class<?> entityClass, AttrsStyle _style)
 	{
 		if (entityTableMap.get(entityClass) != null) { return; }
 		
-		AttrsStyle attrsStyle = null;
 		if (entityClass.isAnnotationPresent(Style.class))
 		{
 			Style style = entityClass.getAnnotation(Style.class);
 			attrsStyle = style.style();
 		}
-		
-		if (attrsStyle == null && tstyle != null)
-		{
-			attrsStyle = tstyle;
-		}
-		else
-		{
-			attrsStyle = AttrsStyle.CamelHump;
-		}
+		attrsStyle = _style;
 		
 		// 表名
 		EntityTable entityTable = null;
