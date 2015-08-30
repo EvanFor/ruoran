@@ -5,6 +5,7 @@ import java.util.List;
 import com.ruoran.entity.Example;
 import com.ruoran.entity.helper.EntityHelper;
 import com.ruoran.mybatis.mapper.CommonMapper;
+import com.ruoran.mybatis.page.PageParam;
 
 /**
  * 封装的CommonMapper,实际上只对select方法做了处理<br>
@@ -15,7 +16,7 @@ import com.ruoran.mybatis.mapper.CommonMapper;
  */
 public class EntityMapper
 {
-	//需要注入该类，可以构造参数注入 -- 注意这里
+	// 需要注入该类，可以构造参数注入 -- 注意这里
 	private CommonMapper commonMapper;
 	
 	public EntityMapper(CommonMapper commonMapper)
@@ -24,9 +25,9 @@ public class EntityMapper
 	}
 	
 	/**
-	 * 根据参数进行查询，查询结果最多只能有一个
-	 * <br>查询条件为属性String类型不为空，其他类型!=null时
-	 * <br>where property = ? and property2 = ? 条件
+	 * 根据参数进行查询，查询结果最多只能有一个 <br>
+	 * 查询条件为属性String类型不为空，其他类型!=null时 <br>
+	 * where property = ? and property2 = ? 条件
 	 *
 	 * @param record
 	 * @param <T>
@@ -40,25 +41,25 @@ public class EntityMapper
 	}
 	
 	/**
-	 * 根据参数进行查询,record可以是Class<?>类型
-	 * <br>查询条件为属性String类型不为空，其他类型!=null时
-	 * <br>where property = ? and property2 = ? 条件
+	 * 根据参数进行查询,record可以是Class<?>类型 <br>
+	 * 查询条件为属性String类型不为空，其他类型!=null时 <br>
+	 * where property = ? and property2 = ? 条件
 	 *
 	 * @param record
 	 * @param <T>
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	public <T> List<T> select(T record)
+	public <T> List<T> select(T record, PageParam page)
 	{
 		if (record == null) { throw new NullPointerException("实体或者主键参数不能为空!"); }
-		return (List<T>) EntityHelper.maplist2BeanList(commonMapper.select(record), record.getClass());
+		return (List<T>) EntityHelper.maplist2BeanList(commonMapper.select(record, page), record.getClass());
 	}
 	
 	/**
-	 * 根据参数进行查询总数,record可以是Class<?>类型
-	 * <br>查询条件为属性String类型不为空，其他类型!=null时
-	 * <br>where property = ? and property2 = ? 条件
+	 * 根据参数进行查询总数,record可以是Class<?>类型 <br>
+	 * 查询条件为属性String类型不为空，其他类型!=null时 <br>
+	 * where property = ? and property2 = ? 条件
 	 *
 	 * @param record
 	 * @param <T>
@@ -70,27 +71,27 @@ public class EntityMapper
 	}
 	
 	/**
-	* 根据主键查询结果，主键不能为null或空
-	*
-	* @param entityClass
-	* @param key
-	* @param <T>
-	* @return
-	*/
+	 * 根据主键查询结果，主键不能为null或空
+	 *
+	 * @param entityClass
+	 * @param key
+	 * @param <T>
+	 * @return
+	 */
 	public <T> T selectByPrimaryKey(Class<T> entityClass, Object key)
 	{
 		return (T) EntityHelper.map2Bean(commonMapper.selectByPrimaryKey(entityClass, key), entityClass);
 	}
 	
 	/**
-	* 插入数据库，主键字段没有值的时候不会出现在sql中
-	* <br>如果是自增主键，会自动获取值
-	* <br>如果是自增主键，并且该主键属性有值，会使用主键的属性值，不会使用自增
-	*
-	* @param record
-	* @param <T>
-	* @return
-	*/
+	 * 插入数据库，主键字段没有值的时候不会出现在sql中 <br>
+	 * 如果是自增主键，会自动获取值 <br>
+	 * 如果是自增主键，并且该主键属性有值，会使用主键的属性值，不会使用自增
+	 *
+	 * @param record
+	 * @param <T>
+	 * @return
+	 */
 	public <T> int insert(T record)
 	{
 		return commonMapper.insert(record);
@@ -109,8 +110,8 @@ public class EntityMapper
 	}
 	
 	/**
-	 * 根据条件进行删除，条件不能为空，并且必须有至少一个条件才能删除
-	 * <br>该方法不能直接删除全部数据
+	 * 根据条件进行删除，条件不能为空，并且必须有至少一个条件才能删除 <br>
+	 * 该方法不能直接删除全部数据
 	 *
 	 * @param record
 	 * @param <T>
@@ -162,7 +163,8 @@ public class EntityMapper
 	 * 通过Example类来查询count
 	 *
 	 * @param entityClass
-	 * @param example     可以是Mybatis生成器生成的Example类或者通用的Example类
+	 * @param example
+	 *            可以是Mybatis生成器生成的Example类或者通用的Example类
 	 * @param <T>
 	 * @return
 	 */
@@ -172,13 +174,14 @@ public class EntityMapper
 	}
 	
 	/**
-	* 通过Example删除
-	*
-	* @param entityClass
-	* @param example     可以是Mybatis生成器生成的Example类或者通用的Example类
-	* @param <T>
-	* @return
-	*/
+	 * 通过Example删除
+	 *
+	 * @param entityClass
+	 * @param example
+	 *            可以是Mybatis生成器生成的Example类或者通用的Example类
+	 * @param <T>
+	 * @return
+	 */
 	public <T> int deleteByExample(Class<T> entityClass, Object example)
 	{
 		return commonMapper.deleteByExample(entityClass, example);
@@ -198,16 +201,17 @@ public class EntityMapper
 	}
 	
 	/**
-	* 通过Example来查询
-	*
-	* @param entityClass
-	* @param example     可以是Mybatis生成器生成的Example类或者通用的Example类
-	* @param <T>
-	* @return
-	*/
-	public <T> List<T> selectByExample(Class<T> entityClass, Object example)
+	 * 通过Example来查询
+	 *
+	 * @param entityClass
+	 * @param example
+	 *            可以是Mybatis生成器生成的Example类或者通用的Example类
+	 * @param <T>
+	 * @return
+	 */
+	public <T> List<T> selectByExample(Class<T> entityClass, Object example, PageParam page)
 	{
-		return (List<T>) EntityHelper.maplist2BeanList(commonMapper.selectByExample(entityClass, example), entityClass);
+		return (List<T>) EntityHelper.maplist2BeanList(commonMapper.selectByExample(entityClass, example, page), entityClass);
 	}
 	
 	/**
@@ -218,20 +222,21 @@ public class EntityMapper
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	public <T> List<T> selectByExample(Example example)
+	public <T> List<T> selectByExample(Example example, PageParam page)
 	{
 		if (example == null) { throw new NullPointerException("example参数不能为空!"); }
-		return (List<T>) EntityHelper.maplist2BeanList(commonMapper.selectByExample(example.getEntityClass(), example), example.getEntityClass());
+		return (List<T>) EntityHelper.maplist2BeanList(commonMapper.selectByExample(example.getEntityClass(), example, page), example.getEntityClass());
 	}
 	
 	/**
-	* 通过Example进行更新非空字段
-	*
-	* @param record
-	* @param example 可以是Mybatis生成器生成的Example类或者通用的Example类
-	* @param <T>
-	* @return
-	*/
+	 * 通过Example进行更新非空字段
+	 *
+	 * @param record
+	 * @param example
+	 *            可以是Mybatis生成器生成的Example类或者通用的Example类
+	 * @param <T>
+	 * @return
+	 */
 	public <T> int updateByExampleSelective(T record, Object example)
 	{
 		return commonMapper.updateByExampleSelective(record, example);
@@ -241,7 +246,8 @@ public class EntityMapper
 	 * 通过Example进行更新全部字段
 	 *
 	 * @param record
-	 * @param example 可以是Mybatis生成器生成的Example类或者通用的Example类
+	 * @param example
+	 *            可以是Mybatis生成器生成的Example类或者通用的Example类
 	 * @param <T>
 	 * @return
 	 */
