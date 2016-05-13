@@ -46,6 +46,12 @@
 			<artifactId>tomcat-embed-logging-log4j</artifactId>
 			<version>8.0.33</version>
 		</dependency>
+		
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>javax.servlet-api</artifactId>
+			<version>3.1.0</version>
+		</dependency>
 
 		<!-- Base -->
 		<dependency>
