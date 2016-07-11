@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpCookie;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -122,6 +123,41 @@ public class EasyResponse
 	public Map<String, List<String>> headers()
 	{
 		return headers;
+	}
+	
+	public Map<String, String> headersMap(boolean smart)
+	{
+		Map<String, String> headerMap = new LinkedHashMap<>();
+		if (this.headers != null)
+		{
+			for (String key : this.headers.keySet())
+			{
+				List<String> val = this.headers.get(key);
+				if (val != null)
+				{
+					if ((val.size() > 1 && smart) || val.size() == 1)
+					{
+						headerMap.put(key, val.get(0));
+					}
+					else
+					{
+						StringBuffer sb = new StringBuffer();
+						for (String str : val)
+						{
+							sb.append(str).append(",");
+						}
+						if (sb.length() > 0) sb.deleteCharAt(sb.length() - 1);
+						headerMap.put(key, sb.toString());
+					}
+				}
+			}
+		}
+		return headerMap;
+	}
+	
+	public Map<String, String> headersMap()
+	{
+		return headersMap(true);
 	}
 	
 	public void headers(Map<String, List<String>> headers)
