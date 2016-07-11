@@ -183,6 +183,18 @@ public class EasyRequest
 		return this;
 	}
 	
+	public EasyRequest headers(Map<String, String> headerMap)
+	{
+		if (headerMap != null)
+		{
+			for (String key : headerMap.keySet())
+			{
+				this.headers.put(key, headerMap.get(key));
+			}
+		}
+		return this;
+	}
+	
 	public Map<String, String> headers()
 	{
 		return this.headers;
