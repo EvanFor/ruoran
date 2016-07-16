@@ -1,6 +1,9 @@
 package com.ruoran.http;
 
 import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpCookie;
@@ -73,7 +76,7 @@ public class EasyResponse
 		return request.url().toString();
 	}
 	
-	public void data(byte[] data)
+	protected void data(byte[] data)
 	{
 		this.data = data;
 	}
@@ -86,6 +89,20 @@ public class EasyResponse
 	public String stringBody()
 	{
 		return stringResult(EasyHTTP.DEFAULT_CHARSET);
+	}
+	
+	public void saveToFile(String pathname)
+	{
+		try
+		{
+			FileOutputStream writer = new FileOutputStream(new File(pathname));
+			writer.write(data);
+			writer.close();
+		}
+		catch (IOException e)
+		{
+			e.printStackTrace();
+		}
 	}
 	
 	public String stringResult(String charset)
@@ -120,7 +137,7 @@ public class EasyResponse
 		}
 	}
 	
-	public Map<String, List<String>> headers()
+	protected Map<String, List<String>> headers()
 	{
 		return headers;
 	}
@@ -160,12 +177,12 @@ public class EasyResponse
 		return headersMap(true);
 	}
 	
-	public void headers(Map<String, List<String>> headers)
+	protected void headers(Map<String, List<String>> headers)
 	{
 		this.headers = headers;
 	}
 	
-	public void cookies(List<HttpCookie> cookies)
+	protected void cookies(List<HttpCookie> cookies)
 	{
 		this.cookies = cookies;
 	}
