@@ -103,8 +103,10 @@ public class UserDao implements UserTemplateInterface
 	
 	private List<Integer> determineThePage(int pageNum, int pageSize)
 	{
-		List<Integer> ids = new ArrayList<>(dataBase.keySet());
+		List<Integer> ids = new ArrayList<Integer>(dataBase.keySet());
+		if (pageNum < 1) pageNum = 1;
 		int start = (pageNum - 1) * pageSize;
+		if (start > ids.size()) start = ids.size() - pageSize;
 		int end = pageNum * pageSize > ids.size() ? ids.size() : pageNum * pageSize;
 		return ids.subList(start, end);
 	}
