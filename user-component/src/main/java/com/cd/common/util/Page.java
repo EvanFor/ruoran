@@ -12,7 +12,7 @@ public class Page<T> implements Serializable
 	private Integer pageNum = 1;
 	private Long pages = 0L;
 	private Long records = 0L;
-	private List<T> result = new ArrayList<T>();
+	private List<T> result = new ArrayList<>();
 	
 	public Page()
 	{

@@ -3,42 +3,71 @@ package com.cd.common.domain;
 import java.io.Serializable;
 import java.util.Date;
 
+import javax.validation.GroupSequence;
+import javax.validation.Valid;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
 import org.codehaus.jackson.map.annotate.JsonDeserialize;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
+import org.hibernate.validator.constraints.NotEmpty;
+import org.hibernate.validator.constraints.Range;
 
 import com.cd.common.util.jackson.CustomDateDeserializer;
 import com.cd.common.util.jackson.CustomDateSerializer;
+import com.cd.common.validate.ext.Past;
+import com.cd.common.validate.groups.Add;
+import com.cd.common.validate.groups.Update;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
+// 先验证Add分组，如果有错误立即返回而不会验证Update分组，接着如果Add分组验证通过了，那么才去验证Update分组，最后指定User.class表示那些没有分组的在最后
+@GroupSequence({ Add.class, Update.class, User.class })
 public class User implements Serializable
 {
 	private static final long serialVersionUID = 1L;
 	
 	private Integer id;
 	
+	@NotNull(groups = { Add.class, Update.class })
+	@NotEmpty(groups = { Add.class, Update.class })
+	@Size(min = 4, max = 30)
 	private String name;
 	
 	private String username;
 	
 	private String password;
 	
+	@Range(max = 120, min = 1, groups = Add.class)
 	private Integer age;
 	
+	@NotNull(groups = Add.class)
 	private Boolean married;
 	
+	@NotNull(groups = { Update.class })
 	private Double money;
 	
+	@NotNull(groups = Add.class)
 	private Short gender;
 	
+	@NotNull(groups = { Update.class })
+	@Min(200)
 	private Float salary;
 	
+	@Past(value = "2014-12-24")
 	@JsonFormat(pattern = "yyyy-MM-dd")
 	private Date birthday;
 	
+	@NotNull
+	@Valid
 	@JsonInclude(Include.NON_NULL)
 	private Card card;
+	
+	// 关联校验也适用于集合类型的字段,
+	// 也就是说,任何下列的类型:数组,实现了java.lang.Iterable接口(例如Collection,List 和
+	// Set),实现了java.util.Map接口
 	
 	public User(String username, String password, String name, Integer age, Boolean married, Double money, Short gender, Float salary, Date birthday)
 	{

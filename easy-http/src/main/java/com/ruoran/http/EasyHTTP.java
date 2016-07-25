@@ -222,7 +222,7 @@ public class EasyHTTP
 	
 	private static void writeData(final EasyRequest request, final OutputStream outputStream, final String bound) throws IOException
 	{
-		logger.warn("request的参数发送优先级:inputStream > requestBody > data ; 请注意优先级进行参数调整!");
+		logger.debug("request的参数发送优先级:inputStream > requestBody > data ; 请注意优先级进行参数调整!");
 		
 		final Collection<Pair> data = request.data();
 		final BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(outputStream, request.postDataCharset()));
