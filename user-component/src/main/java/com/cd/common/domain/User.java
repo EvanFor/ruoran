@@ -9,13 +9,9 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-import org.codehaus.jackson.map.annotate.JsonDeserialize;
-import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.hibernate.validator.constraints.Range;
 
-import com.cd.common.util.jackson.CustomDateDeserializer;
-import com.cd.common.util.jackson.CustomDateSerializer;
 import com.cd.common.validate.ext.Past;
 import com.cd.common.validate.groups.Add;
 import com.cd.common.validate.groups.Update;
@@ -140,13 +136,11 @@ public class User implements Serializable
 		this.salary = salary;
 	}
 	
-	@JsonSerialize(using = CustomDateSerializer.class)
 	public Date getBirthday()
 	{
 		return birthday;
 	}
 	
-	@JsonDeserialize(using = CustomDateDeserializer.class)
 	public void setBirthday(Date birthday)
 	{
 		this.birthday = birthday;
