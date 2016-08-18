@@ -36,7 +36,6 @@ public class EasyResponse
 	private String statusMessage;
 	private int statusCode;
 	private String charset;
-	private boolean gizp = false;
 	private boolean executed = false;
 	private int contentLength;
 	
@@ -109,30 +108,32 @@ public class EasyResponse
 	{
 		try
 		{
-			if (this.gizp)
-			{
-				return new String(HttpUtil.unGzip(this.data), charset);
-			}
-			else
-			{
-				return new String(this.data, charset);
-			}
+			return new String(HttpUtil.unGzip(this.data), charset);
 		}
 		catch (UnsupportedEncodingException e)
 		{
-			logger.error("", e);
+			logger.warn("", e);
+			try
+			{
+				return new String(this.data, charset);
+			}
+			catch (UnsupportedEncodingException ex)
+			{
+				logger.error("", ex);
+			}
 		}
 		return null;
 	}
 	
 	public InputStream streamBody()
 	{
-		if (this.gizp)
+		try
 		{
 			return new ByteArrayInputStream(HttpUtil.unGzip(this.data));
 		}
-		else
+		catch (Exception e)
 		{
+			logger.warn("", e);
 			return new ByteArrayInputStream(this.data);
 		}
 	}
@@ -202,32 +203,16 @@ public class EasyResponse
 				cookieMap.put(cookie.getName(), cookie.getValue());
 			}
 		}
-		
-		String headerCookie = this.header("Set-Cookie");
-		if (headerCookie != null && headerCookie.trim().length() > 0)
-		{
-			String[] str = headerCookie.split("; ");
-			for (String m : str)
-			{
-				if (m.contains("="))
-				{
-					String x[] = m.split("=");
-					if (!cookieMap.containsKey(x[0]))
-					{
-						cookieMap.put(x[0], x[1]);
-					}
-				}
-			}
-		}
 		return cookieMap;
 	}
 	
 	public String cookiesString()
 	{
 		StringBuffer sb = new StringBuffer();
-		if (cookiesMap().size() > 0)
+		Map<String, String> cookiesMap = cookiesMap();
+		if (cookiesMap.size() > 0)
 		{
-			for (Entry<String, String> me : cookiesMap().entrySet())
+			for (Entry<String, String> me : cookiesMap.entrySet())
 			{
 				sb.append(me.getKey()).append("=").append(me.getValue()).append("; ");
 			}
@@ -329,17 +314,6 @@ public class EasyResponse
 	public EasyResponse charset(String charset)
 	{
 		this.charset = charset;
-		return this;
-	}
-	
-	public boolean gzip()
-	{
-		return this.gizp;
-	}
-	
-	public EasyResponse gzip(boolean gzip)
-	{
-		this.gizp = gzip;
 		return this;
 	}
 	

@@ -18,7 +18,6 @@ import java.security.NoSuchAlgorithmException;
 import java.security.cert.X509Certificate;
 import java.util.Collection;
 import java.util.Map;
-import java.util.zip.GZIPInputStream;
 
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
@@ -50,7 +49,6 @@ public class EasyHTTP
 	public static final String TEXT_XML = "text/xml;charset=" + DEFAULT_CHARSET;
 	public static final String TEXT_HTML = "text/html;charset=" + DEFAULT_CHARSET;
 	
-	private static final String CONTENT_ENCODING = "Content-Encoding";
 	private static final String CONTENT_TYPE = "Content-Type";
 	private static final String MULTIPART_FORM_DATA = "multipart/form-data";
 	private static final String FORM_URL_ENCODED = "application/x-www-form-urlencoded";
@@ -188,25 +186,16 @@ public class EasyHTTP
 				throw new RuntimeException("遇到异常,详情如下: status=" + status + "; message=" + responseMessage + "; url=" + request.url());
 			}
 			
-			if (contentLength != 0 && request.method() != RequestMethod.HEAD)
+			if ( request.method() != RequestMethod.HEAD)
 			{
 				InputStream bodyStream = conn.getErrorStream() != null ? conn.getErrorStream() : conn.getInputStream();
 				if (response.contentType() == null)
 				{
 					response.contentType(URLConnection.guessContentTypeFromStream(bodyStream));
 				}
-				
-				if (response.hasHeaderWithValue(CONTENT_ENCODING, "gzip"))
-				{
-					bodyStream = new GZIPInputStream(bodyStream);
-					response.gzip(true);
-				}
 				response.data(HttpUtil.readDataFromResponse(bodyStream));
 			}
-			else
-			{
-				response.data(new byte[0]);
-			}
+			 
 		}
 		catch (Exception e)
 		{
