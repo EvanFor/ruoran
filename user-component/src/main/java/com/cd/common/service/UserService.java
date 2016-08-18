@@ -10,6 +10,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.validation.ValidationException;
+
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFRichTextString;
 import org.apache.poi.hssf.usermodel.HSSFRow;
@@ -24,6 +26,10 @@ import com.cd.common.UserTemplateInterface;
 import com.cd.common.dao.UserDao;
 import com.cd.common.domain.User;
 import com.cd.common.util.Page;
+import com.cd.common.validate.DomainValidator;
+import com.cd.common.validate.ValidateResult;
+import com.cd.common.validate.groups.Add;
+import com.cd.common.validate.groups.Update;
 
 @Service
 public class UserService implements UserTemplateInterface
@@ -31,29 +37,50 @@ public class UserService implements UserTemplateInterface
 	@Autowired
 	private UserDao userDao;
 	
+	@Autowired
+	private DomainValidator validator;
+	
 	public Page<User> queryForPage(int pageNum, int pageSize)
 	{
 		return userDao.queryForPage(pageNum, pageSize);
 	}
 	
-	public User find(Integer id)
+	public User findById(Integer id)
 	{
-		return userDao.find(id);
+		return userDao.findById(id);
 	}
 	
-	public User add(User user) 
+	public User add(User user) throws ValidationException
 	{
-		return userDao.add(user);
+		if (null == validator)
+		{
+			return null;
+		}
+		else
+		{
+			ValidateResult result = validator.validate(user, Add.class);
+			if (result.hasError()) { throw new ValidationException(result.getErrorMessages()); }
+			return userDao.add(user);
+		}
 	}
 	
-	public User delete(Integer id) 
+	public User deleteById(Integer id) throws ValidationException
 	{
-		return userDao.delete(id);
+		return userDao.deleteById(id);
 	}
 	
-	public User update(User user) 
+	public User update(User user) throws ValidationException
 	{
-		return userDao.update(user);
+		if (null == validator)
+		{
+			return null;
+		}
+		else
+		{
+			ValidateResult result = validator.validate(user, Update.class);
+			if (result.hasError()) { throw new ValidationException(result.getErrorMessages()); }
+			return userDao.update(user);
+		}
 	}
 	
 	@Override
@@ -143,7 +170,7 @@ public class UserService implements UserTemplateInterface
 	}
 	
 	@Override
-	public User login(User user) 
+	public User login(User user) throws ValidationException
 	{
 		return userDao.login(user);
 	}

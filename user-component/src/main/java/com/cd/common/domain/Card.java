@@ -3,15 +3,24 @@ package com.cd.common.domain;
 import java.io.Serializable;
 import java.util.Date;
 
+import javax.validation.constraints.NotNull;
+
+import org.hibernate.validator.constraints.Length;
+
 public class Card implements Serializable
 {
 	private static final long serialVersionUID = 1L;
 	
 	private Integer id;
+	@NotNull
+	@Length(min = 4, max = 18)
 	private String number;
 	
+	@NotNull
 	private Integer type;
 	
+	@NotNull
+	@Length(min = 4, max = 18)
 	private String name;
 	
 	private Date startTime;

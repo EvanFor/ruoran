@@ -3,9 +3,11 @@ package com.cd.common.dao;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
+
+import javax.validation.ValidationException;
 
 import org.springframework.stereotype.Repository;
 
@@ -17,7 +19,8 @@ import com.cd.common.util.Page;
 @Repository
 public class UserDao implements UserTemplateInterface
 {
-	protected static Map<Integer, User> dataBase = new ConcurrentHashMap<Integer, User>();
+	
+	protected static Map<Integer, User> dataBase = new LinkedHashMap<Integer, User>();
 	
 	static String xing = "王李张刘陈杨黄赵吴周徐孙马朱胡郭何高林罗郑梁谢宋唐许韩冯邓曹彭曾萧田董潘袁于蒋蔡余杜叶程苏魏吕丁任沈姚卢姜崔钟谭陆汪范金石廖贾夏韦傅方白邹孟熊秦邱江尹薛阎段雷侯龙史陶黎贺顾毛郝龚邵万钱严覃武戴莫孔向汤";
 	static String[] ming = { "正", "阳", "斌", "龙", "旭", "林", "玫", "琪", "熊", "兵", "威", "伟", "琼", "志", "文", "武", "栋", "欣", "楠", "虎", "贝贝", "娜娜", "静静", "婷婷", "丹丹", "蕾蕾", "蓓蓓", "凯", "潇", "紫萱", "子轩", "新余", "馨予", "静蕾", "磊", "刚", "梅", "媚", "丽丽", "莉莉", "佳", "正宇", "晨", "晓雪" };
@@ -90,7 +93,7 @@ public class UserDao implements UserTemplateInterface
 			data.add(dataBase.get(id));
 		}
 		
-		Page<User> page = new Page<User>();
+		Page<User> page = new Page<>();
 		page.setPageNum(pageNum);
 		page.setPageSize(pageSize);
 		page.setRecords(this.count());
@@ -108,7 +111,7 @@ public class UserDao implements UserTemplateInterface
 		return ids.subList(start, end);
 	}
 	
-	public User find(Integer id)
+	public User findById(Integer id)
 	{
 		return dataBase.get(id);
 	}
@@ -122,7 +125,7 @@ public class UserDao implements UserTemplateInterface
 		return user;
 	}
 	
-	public synchronized User delete(Integer id)
+	public synchronized User deleteById(Integer id)
 	{
 		if (id <= 8) { throw new IllegalArgumentException("该用户为保留用户,不能删除"); }
 		
@@ -163,7 +166,7 @@ public class UserDao implements UserTemplateInterface
 	}
 	
 	@Override
-	public User login(User user)
+	public User login(User user) throws ValidationException
 	{
 		String userName = user.getUsername();
 		String passWord = user.getPassword();
