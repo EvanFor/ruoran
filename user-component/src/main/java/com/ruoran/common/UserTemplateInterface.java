@@ -1,7 +1,7 @@
-package com.cd.common;
+package com.ruoran.common;
 
-import com.cd.common.domain.User;
-import com.cd.common.util.Page;
+import com.ruoran.common.domain.User;
+import com.ruoran.common.util.Page;
 
 public interface UserTemplateInterface {
     Page<User> queryForPage(int pageNum, int pageSize);

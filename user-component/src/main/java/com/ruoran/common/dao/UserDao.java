@@ -1,9 +1,9 @@
-package com.cd.common.dao;
+package com.ruoran.common.dao;
 
-import com.cd.common.CountChangeListener;
-import com.cd.common.UserTemplateInterface;
-import com.cd.common.domain.User;
-import com.cd.common.util.Page;
+import com.ruoran.common.CountChangeListener;
+import com.ruoran.common.UserTemplateInterface;
+import com.ruoran.common.domain.User;
+import com.ruoran.common.util.Page;
 import org.springframework.stereotype.Repository;
 
 import java.security.SecureRandom;

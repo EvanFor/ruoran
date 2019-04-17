@@ -1,4 +1,4 @@
-package com.cd.common.domain;
+package com.ruoran.common.domain;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;

@@ -1,7 +1,8 @@
 package com.cd.common.service;
 
-import com.cd.common.domain.User;
-import com.cd.common.util.Page;
+import com.ruoran.common.domain.User;
+import com.ruoran.common.service.UserService;
+import com.ruoran.common.util.Page;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;

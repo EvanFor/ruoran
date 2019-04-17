@@ -1,4 +1,4 @@
-package com.cd.common.util.dubbo;
+package com.ruoran.common.util.dubbo;
 
 import java.io.Serializable;
 

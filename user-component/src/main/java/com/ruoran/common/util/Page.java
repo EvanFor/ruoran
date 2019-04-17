@@ -1,4 +1,4 @@
-package com.cd.common.util;
+package com.ruoran.common.util;
 
 import java.io.Serializable;
 import java.util.ArrayList;

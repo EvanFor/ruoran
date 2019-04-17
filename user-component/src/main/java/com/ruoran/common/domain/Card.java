@@ -1,4 +1,4 @@
-package com.cd.common.domain;
+package com.ruoran.common.domain;
 
 import java.io.Serializable;
 import java.util.Date;
