@@ -1,7 +1,6 @@
-package com.cd.common.service;
+package com.ruoran.common.service;
 
 import com.ruoran.common.domain.User;
-import com.ruoran.common.service.UserService;
 import com.ruoran.common.util.Page;
 import org.junit.Assert;
 import org.junit.Test;
